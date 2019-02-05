@@ -1,0 +1,15 @@
+{
+  "name": "sc-test",
+  "version": "1.0.0",
+  "description": "Test container for SmartCheck scanning.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "RMaynard",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "node-datetime": "^2.1.2"
+  }
+}
