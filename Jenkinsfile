@@ -7,7 +7,7 @@ def scanImage(Map config) {
 
   // DSSC config
   def smartcheckConfig = [
-      host: "18.217.222.124"  // Config with SC address
+      host: "18.221.223.248"  // Config with SC address
   ]
   withCredentials([
       usernamePassword(credentialsId: 'smart-check-jenkins-user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD') // Add creds in Jenkins cred manager
