@@ -160,7 +160,7 @@ def scanImage(Map config) {
 pipeline {
   environment {
     registry = "https://279773871986.dkr.ecr.us-east-2.amazonaws.com"
-    repository = "sc-test"
+    repository = "sc-test-vuln"
     registryCredential = 'ecr:us-east-2:ecr'
     dockerImage = ""
 
@@ -170,13 +170,13 @@ pipeline {
   stages {
     stage("Cloning Git Repo") {
       steps {
-        git "https://github.com/robmaynardjr/SC-Test.git"
+        git "https://github.com/robmaynardjr/SC-Test-Vuln.git"
       }
     }
     stage("Building image") {
       steps{
         script {
-          dockerImage = docker.build('279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test:latest')
+          dockerImage = docker.build('279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln:latest')
         }
       }
     }
