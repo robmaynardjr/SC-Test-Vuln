@@ -1,4 +1,4 @@
-[![Build Status](http://jenkins.basement-devops.com/jenkins/job/sc-test-vuln/badge/icon)](http://jenkins.basement-devops.com/jenkins/job/sc-test-vuln/)   [![SmartCheck](http://jenkins.basement-devops.com/jenkins/job/sc-test-vuln/badge/icon)](http://jenkins.basement-devops.com/jenkins/job/sc-test-vuln/)
+
 
 # Vulnerable Test Site
 Vulnerable Test Node.JS Container
