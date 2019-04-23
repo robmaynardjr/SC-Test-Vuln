@@ -40,7 +40,7 @@ pipeline {
                 ])             
             ]){            
                 smartcheckScan([
-                    imageName: "robmaynard/sc-test-vuln:latest",
+                    imageName: "registry.hub.docker.com/robmaynard/sc-test-vuln:latest",
                     smartcheckHost: "10.0.10.100",
                     insecureSkipTLSVerify: true,
                     smartcheckCredentialsId: "smart-check-jenkins-user",
