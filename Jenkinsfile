@@ -34,11 +34,12 @@ pipeline {
 
     stage("Smart Check Scan") {
         steps {
-            withCredentials([
+            withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: 'ecr', 
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'                
-            ]){            
+            ]]){            
                 smartcheckScan([
                     imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
                     smartcheckHost: "10.0.10.100",
