@@ -46,10 +46,9 @@ pipeline {
                     insecureSkipTLSVerify: true,
                     smartcheckCredentialsId: "smart-check-jenkins-user",
                     imagePullAuth: new groovy.json.JsonBuilder([
-                        aws: {                           
-                            accessKeyID: 'AWS_ACCESS_KEY_ID',
-                            secretAccessKey: 'AWS_SECRET_ACCESS_KEY'                            
-                        }
+                        aws: [
+                            region: "us-east-2"                    
+                        ]   
                         ]).toString(),
                     ])
                 }
