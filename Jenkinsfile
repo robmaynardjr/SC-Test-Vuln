@@ -4,9 +4,8 @@ pipeline {
     repository = "sc-test-vuln"
     registryCredential = 'ecr:us-east-2:ecr'
     dockerImage = ""
-
-    
   }
+
   agent any
   stages {
     stage("Cloning Git Repo") {
@@ -14,6 +13,7 @@ pipeline {
         git "https://github.com/robmaynardjr/SC-Test-Vuln.git"
       }
     }
+
     stage("Building image") {
       steps{
         script {
@@ -21,6 +21,7 @@ pipeline {
         }
       }
     }
+
     stage("Stage Image") {
       steps{
         script {
@@ -30,6 +31,7 @@ pipeline {
         }
       }
     }
+
     stage("Smart Check Scan") {
         withCredentials([
             usernamePassword([
@@ -38,17 +40,18 @@ pipeline {
                 passwordVariable: 'AWS_SECRET_ACCESS_KEY',
             ])
         ]){
-        smartcheckScan([
-            imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
-            smartcheckHost: "smartcheck.basement-devops.com",
-            smartcheckCredentialsId: "smart-check-jenkins-user"
-            // imagePullAuth: new groovy.json.JsonBuilder([
-            //     username: REGISTRY_USER,
-            //     password: REGISTRY_PASSWORD,
-            //     ]).toString(),
-            // ])
-        }
+            smartcheckScan([
+                imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
+                smartcheckHost: "smartcheck.basement-devops.com",
+                smartcheckCredentialsId: "smart-check-jenkins-user"
+                // imagePullAuth: new groovy.json.JsonBuilder([
+                //     username: REGISTRY_USER,
+                //     password: REGISTRY_PASSWORD,
+                //     ]).toString(),
+                // ])
+            }
     }
+
     stage ("Deploy to Cluster") {
       steps{
         echo "Function to be added at a later date."
