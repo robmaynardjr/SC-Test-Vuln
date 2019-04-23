@@ -1,9 +1,7 @@
 pipeline {
   environment {
-    registry = "https://279773871986.dkr.ecr.us-east-2.amazonaws.com"
-    repository = "sc-test-vuln"
-    registryCredential = 'ecr:us-east-2:ecr'
-    dockerImage = ""
+    registry = "robmaynard/sc-test-vuln"
+    registryCredential = 'dockerhub'
   }
 
   agent any
@@ -17,7 +15,7 @@ pipeline {
     stage("Building image") {
       steps{
         script {
-          dockerImage = docker.build('279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln:latest')
+          dockerImage = docker.build('https://hub.docker.com/r/robmaynard/sc-test-vuln:latest')
         }
       }
     }
@@ -34,24 +32,21 @@ pipeline {
 
     stage("Smart Check Scan") {
         steps {
-            withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding', 
-                    credentialsId: 'ecr', 
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'                
-            ]]){            
+            withCredentials([
+                usernamePassword([
+                    credentialsId: "dockerhub",
+                    usernameVariable: "USER",
+                    passwordVariable: "PASSWORD",
+                ])             
+            ]){            
                 smartcheckScan([
-                    imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
+                    imageName: "hub.docker.com/r/robmaynard/sc-test-vuln",
                     smartcheckHost: "10.0.10.100",
                     insecureSkipTLSVerify: true,
                     smartcheckCredentialsId: "smart-check-jenkins-user",
                     imagePullAuth: new groovy.json.JsonBuilder([
-                        aws: [
-                            region: "us-east-2",
-                            accessKeyID: 'AWS_ACCESS_KEY_ID',
-                            secretAccessKey: 'AWS_SECRET_ACCESS_KEY',
-                            registry: "279773871986"                  
-                        ]   
+                        username: USER,
+                        password: PASSWORD,
                         ]).toString(),
                     ])
                 }
