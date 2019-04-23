@@ -35,11 +35,6 @@ pipeline {
     stage("Smart Check Scan") {
         steps {
             withCredentials([
-                usernamePassword([
-                    credentialsId: "ecr",
-                    usernameVariable: 'AWS_ACCESS_KEY_ID',
-                    passwordVariable: 'AWS_SECRET_ACCESS_KEY',
-                ])
             ]){
                 smartcheckScan([
                     imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
