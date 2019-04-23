@@ -48,7 +48,7 @@ pipeline {
                 //     username: REGISTRY_USER,
                 //     password: REGISTRY_PASSWORD,
                 //     ]).toString(),
-                // ])
+                ])
             }
     }
 
