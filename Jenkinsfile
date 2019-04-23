@@ -23,7 +23,7 @@ pipeline {
     stage("Stage Image") {
       steps{
         script {
-          docker.withRegistry(registry, registryCredential ) {
+          docker.withRegistry('https://hub.docker.com/r/robmaynard/', registryCredential ) {
             dockerImage.push()
           }
         }
@@ -40,7 +40,7 @@ pipeline {
                 ])             
             ]){            
                 smartcheckScan([
-                    imageName: "hub.docker.com/r/robmaynard/sc-test-vuln",
+                    imageName: "robmaynard/sc-test-vuln",
                     smartcheckHost: "10.0.10.100",
                     insecureSkipTLSVerify: true,
                     smartcheckCredentialsId: "smart-check-jenkins-user",
