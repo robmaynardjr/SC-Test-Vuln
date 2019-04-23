@@ -44,7 +44,7 @@ pipeline {
                     imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
                     smartcheckHost: "10.0.10.100",
                     insecureSkipTLSVerify: true,
-                    smartcheckCredentialsId: "smart-check-jenkins-user"
+                    smartcheckCredentialsId: "smart-check-jenkins-user",
                     imagePullAuth: new groovy.json.JsonBuilder([
                         aws: 
                             region: 'us-east-2',
