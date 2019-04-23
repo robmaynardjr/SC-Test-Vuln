@@ -37,7 +37,7 @@ pipeline {
             
                 smartcheckScan([
                     imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
-                    smartcheckHost: "smartcheck.basement-devops.com",
+                    smartcheckHost: "10.0.10.100",
                     smartcheckCredentialsId: "smart-check-jenkins-user"
                     // imagePullAuth: new groovy.json.JsonBuilder([
                     // //     username: REGISTRY_USER,
