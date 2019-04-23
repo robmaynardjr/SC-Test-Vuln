@@ -33,24 +33,26 @@ pipeline {
     }
 
     stage("Smart Check Scan") {
-        withCredentials([
-            usernamePassword([
-                credentialsId: "ecr",
-                usernameVariable: 'AWS_ACCESS_KEY_ID',
-                passwordVariable: 'AWS_SECRET_ACCESS_KEY',
-            ])
-        ]){
-            smartcheckScan([
-                imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
-                smartcheckHost: "smartcheck.basement-devops.com",
-                smartcheckCredentialsId: "smart-check-jenkins-user"
-                // imagePullAuth: new groovy.json.JsonBuilder([
-                //     username: REGISTRY_USER,
-                //     password: REGISTRY_PASSWORD,
-                //     ]).toString(),
+        steps {
+            withCredentials([
+                usernamePassword([
+                    credentialsId: "ecr",
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY',
                 ])
+            ]){
+                smartcheckScan([
+                    imageName: "279773871986.dkr.ecr.us-east-2.amazonaws.com/sc-test-vuln",
+                    smartcheckHost: "smartcheck.basement-devops.com",
+                    smartcheckCredentialsId: "smart-check-jenkins-user"
+                    // imagePullAuth: new groovy.json.JsonBuilder([
+                    //     username: REGISTRY_USER,
+                    //     password: REGISTRY_PASSWORD,
+                    //     ]).toString(),
+                    ])
+                }
             }
-    }
+        }
 
     stage ("Deploy to Cluster") {
       steps{
