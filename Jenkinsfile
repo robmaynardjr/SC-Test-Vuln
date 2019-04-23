@@ -40,10 +40,9 @@ pipeline {
                     smartcheckHost: "10.0.10.100",
                     insecureSkipTLSVerify: true,
                     smartcheckCredentialsId: "smart-check-jenkins-user"
-                    // imagePullAuth: new groovy.json.JsonBuilder([
-                    // //     username: REGISTRY_USER,
-                    // //     password: REGISTRY_PASSWORD,
-                    // //     ]).toString(),
+                    imagePullAuth: new groovy.json.JsonBuilder([
+                        credentialsID: 'ecr'
+                        ]).toString(),
                     ])
                 }
             }
