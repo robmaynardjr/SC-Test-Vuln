@@ -49,7 +49,8 @@ pipeline {
                         aws: [
                             region: "us-east-2",
                             accessKeyID: 'AWS_ACCESS_KEY_ID',
-                            secretAccessKey: 'AWS_SECRET_ACCESS_KEY'                   
+                            secretAccessKey: 'AWS_SECRET_ACCESS_KEY',
+                            registry: "279773871986"                  
                         ]   
                         ]).toString(),
                     ])
