@@ -15,7 +15,7 @@ pipeline {
     stage("Building image") {
       steps{
         script {
-          dockerImage = docker.build('https://hub.docker.com/r/robmaynard/sc-test-vuln:latest')
+          dockerImage = docker.build('robmaynard/sc-test-vuln:latest')
         }
       }
     }
