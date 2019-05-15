@@ -30,7 +30,7 @@ pipeline {
       }
     }
 
-    stage("Smart Check Scan") {
+    stage("Security Check") {
         steps {
             withCredentials([
                 usernamePassword([
