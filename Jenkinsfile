@@ -62,7 +62,7 @@ pipeline {
                             sh "docker login -u '${USER}' -p '${PASSWORD}'"
                             def imgPAuth = " {\"username\":\"${USER}\",\"password\":\"${PASSWORD}\"} "
                             def findings =  " {\"malware\":0,\"vulnerabilities\":{\"defcon1\":0,\"critical\":20,\"high\":200},\"contents\":{\"defcon1\":0,\"critical\":0,\"high\":0},\"checklists\":{\"defcon1\":0,\"critical\":0,\"high\":0} } "
-                            sh "docker run deepsecurity/smartcheck-scan-action --image-name registry.hub.docker.com/robmaynard/sc-test:latest --smartcheck-host=10.0.10.100 --smartcheck-user='$SCUSER' --smartcheck-password='${SCPASSWORD}' --insecure-skip-tls-verify --findings-threshold='${findings}' --image-pull-auth='${imgPAuth}'"
+                            sh "docker run deepsecurity/smartcheck-scan-action --image-name registry.hub.docker.com/robmaynard/sc-test-vuln:latest --smartcheck-host=10.0.10.100 --smartcheck-user='$SCUSER' --smartcheck-password='${SCPASSWORD}' --insecure-skip-tls-verify --findings-threshold='${findings}' --image-pull-auth='${imgPAuth}'"
                         }
                     }
                 }
