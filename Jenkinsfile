@@ -1,63 +1,84 @@
 pipeline {
   environment {
-    registry = "robmaynard/sc-test-vuln"
+    registry = "registry.hub.docker.com"
     registryCredential = 'dockerhub'
+    imgName = 'robmaynard/sc-test-vuln:latest'
+    gitRepo = "https://github.com/robmaynardjr/SC-Test-Vuln.git"
+    smartCheckHost = "10.0.10.100"
   }
+  
+    agent { label 'jenkins-jenkins-slave ' }
 
-  agent any
-  stages {
-    stage("Cloning Git Repo") {
-      steps {
-        git "https://github.com/robmaynardjr/SC-Test-Vuln.git"
-      }
-    }
-
-    stage("Building image") {
-      steps{
-        script {
-          dockerImage = docker.build('robmaynard/sc-test-vuln:latest')
+    stages {
+        stage("Cloning Git Repo") {
+            steps {
+                git gitRepo
+            }
         }
-      }
-    }
 
-    stage("Stage Image") {
-      steps{
-        script {
-          docker.withRegistry('https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
-
-    stage("Security Check") {
-        steps {
-            withCredentials([
-                usernamePassword([
-                    credentialsId: "dockerhub",
-                    usernameVariable: "USER",
-                    passwordVariable: "PASSWORD",
-                ])             
-            ]){            
-                smartcheckScan([
-                    imageName: "registry.hub.docker.com/robmaynard/sc-test-vuln:latest",
-                    smartcheckHost: "10.0.10.100",
-                    insecureSkipTLSVerify: true,
-                    smartcheckCredentialsId: "smart-check-jenkins-user",
-                    imagePullAuth: new groovy.json.JsonBuilder([
-                        username: USER,
-                        password: PASSWORD,
-                        ]).toString(),
-                    ])
+        stage("Building image") {
+            steps{
+                container('docker') {
+                    script {
+                        dockerImage = docker.build(imgName)
+                    }
                 }
             }
         }
-        
 
-    stage ("Deploy to Cluster") {
-      steps{
-        echo "Function to be added at a later date."
-      }
+        stage("Stage Image") {
+            steps{
+                container('docker') {
+                    script {
+                        withCredentials([
+                            usernamePassword([
+                                credentialsId: 'dockerhub', 
+                                passwordVariable: 'PASS', 
+                                usernameVariable: 'USER',
+                                ])
+                            ]) {
+
+                            // docker.withRegistry('', registryCredential ) {
+                            //     dockerImage.push()
+                            echo "Logging into Dockerhub..."
+                            sh "docker login -u '${USER}' -p '${PASS}'"
+                            echo "Pushing Image..."
+                            sh "docker push ${imgName}"                       
+                            }
+                        }   
+                    }
+                }
+            }
+        stage("Security Check") {
+            steps {
+                container('docker') {
+                    script {
+                        withCredentials([
+                            usernamePassword([
+                                credentialsId: "dockerhub",
+                                usernameVariable: "USER",
+                                passwordVariable: "PASSWORD",
+                            ]),
+                            usernamePassword([
+                                credentialsId: "smart-check-jenkins-user",
+                                usernameVariable: "SCUSER",
+                                passwordVariable: "SCPASSWORD",
+                            ])   
+                        ]){
+                            sh "docker login -u '${USER}' -p '${PASSWORD}'"
+                            def imgPAuth = " {\"username\":\"${USER}\",\"password\":\"${PASSWORD}\"} "
+                            def findings =  " {\"malware\":0,\"vulnerabilities\":{\"defcon1\":0,\"critical\":20,\"high\":200},\"contents\":{\"defcon1\":0,\"critical\":0,\"high\":0},\"checklists\":{\"defcon1\":0,\"critical\":0,\"high\":0} } "
+                            sh "docker run deepsecurity/smartcheck-scan-action --image-name registry.hub.docker.com/robmaynard/sc-test:latest --smartcheck-host=10.0.10.100 --smartcheck-user='$SCUSER' --smartcheck-password='${SCPASSWORD}' --insecure-skip-tls-verify --findings-threshold='${findings}' --image-pull-auth='${imgPAuth}'"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage ("Deploy to Cluster") {
+            steps{
+                echo "Function to be added at a later date."
+            }
+        }   
     }
-  }
 }
