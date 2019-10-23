@@ -43,7 +43,7 @@ pipeline {
                     }
                 }
             }
-        stage("Security Check") {
+        stage("Container Image Security Scan") {
             steps {
                 container('jnlp') {
                     script {
